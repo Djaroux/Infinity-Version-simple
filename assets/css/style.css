@@ -919,3 +919,45 @@ body.blank-canvas #page {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+/* ==========================================================================
+   19. Hide Page Titles & Meta (Keep Structure for Gutenberg)
+   ========================================================================== */
+
+/* Hide archive/search page headers but keep for screen readers */
+.page-header {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Exception: keep 404 page headers visible */
+.error-404 .page-header {
+    position: static;
+    left: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
+
+/* Full width for all articles */
+.site-main article {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Full width entry content */
+.entry-content {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+/* Remove margins from Gutenberg blocks */
+.entry-content > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
