@@ -39,9 +39,9 @@ get_header();
                         )
                     );
                     ?>
-                </div><!-- .entry-content -->
+                </div>
 
-            </article><!-- #post-<?php the_ID(); ?> -->
+            </article>
 
             <?php
 
@@ -64,7 +64,7 @@ get_header();
     endif;
     ?>
 
-</main><!-- #main -->
+</main>
 
 <?php
 get_footer();
