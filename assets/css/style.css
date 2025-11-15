@@ -870,3 +870,52 @@ input[type="button"]:hover,
     display: table;
     clear: both;
 }
+
+/* ==========================================================================
+   18. Blank Pages Styles
+   ========================================================================== */
+
+/* Blank page and post templates */
+.blank-page,
+.blank-post {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.blank-page .entry-content,
+.blank-post .entry-content {
+    margin: 0;
+    padding: 0;
+}
+
+/* Blank Canvas Template (No Header/Footer) */
+body.blank-canvas {
+    margin: 0;
+    padding: 0;
+}
+
+body.blank-canvas #page {
+    display: block;
+}
+
+/* Remove default spacing for blank pages */
+.page-template-template-blank-canvas .site-content,
+.blank-page .site-content,
+.blank-post .site-content {
+    padding: 0;
+}
+
+/* Full width content for blank pages */
+.blank-page .container,
+.blank-post .container {
+    max-width: 100%;
+    padding: 0;
+}
+
+/* Remove default margins from Gutenberg blocks on blank pages */
+.blank-page .entry-content > *,
+.blank-post .entry-content > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}

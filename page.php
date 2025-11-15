@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying all pages
+ * The template for displaying all pages (Blank - no title, no meta)
  *
  * @package Infinity_2025_Simple
  * @since 1.0.0
@@ -16,37 +16,11 @@ get_header();
         the_post();
         ?>
 
-        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-            <header class="entry-header">
-                <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-            </header>
-
-            <?php infinity_post_thumbnail( 'large' ); ?>
-
-            <div class="entry-content">
-                <?php
-                the_content();
-
-                wp_link_pages(
-                    array(
-                        'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'infinity' ),
-                        'after'  => '</div>',
-                    )
-                );
-                ?>
-            </div>
-
+        <article id="post-<?php the_ID(); ?>" <?php post_class( 'blank-page' ); ?>>
+            <?php the_content(); ?>
         </article>
 
-        <?php
-        // Comments (if enabled for pages)
-        if ( comments_open() || get_comments_number() ) :
-            comments_template();
-        endif;
-
-    endwhile;
-    ?>
+    <?php endwhile; ?>
 
 </main>
 
