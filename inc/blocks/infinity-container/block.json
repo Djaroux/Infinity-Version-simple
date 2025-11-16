@@ -1,0 +1,80 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "infinity/container",
+  "title": "Infinity Container",
+  "category": "design",
+  "icon": "grid-view",
+  "description": "Un conteneur ultra minimaliste avec options de personnalisation",
+  "keywords": ["container", "wrapper", "box"],
+  "textdomain": "infinity",
+  "supports": {
+    "anchor": true,
+    "html": false
+  },
+  "attributes": {
+    "customClass": {
+      "type": "string",
+      "default": ""
+    },
+    "paddingTop": {
+      "type": "string",
+      "default": ""
+    },
+    "paddingRight": {
+      "type": "string",
+      "default": ""
+    },
+    "paddingBottom": {
+      "type": "string",
+      "default": ""
+    },
+    "paddingLeft": {
+      "type": "string",
+      "default": ""
+    },
+    "marginTop": {
+      "type": "string",
+      "default": ""
+    },
+    "marginRight": {
+      "type": "string",
+      "default": ""
+    },
+    "marginBottom": {
+      "type": "string",
+      "default": ""
+    },
+    "marginLeft": {
+      "type": "string",
+      "default": ""
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": ""
+    },
+    "backgroundImage": {
+      "type": "string",
+      "default": ""
+    },
+    "borderColor": {
+      "type": "string",
+      "default": ""
+    },
+    "borderWidth": {
+      "type": "string",
+      "default": ""
+    },
+    "borderRadius": {
+      "type": "string",
+      "default": ""
+    },
+    "borderStyle": {
+      "type": "string",
+      "default": "solid"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

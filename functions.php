@@ -24,6 +24,7 @@ define( 'INFINITY_URI', get_template_directory_uri() );
 require_once INFINITY_DIR . '/inc/setup.php';
 require_once INFINITY_DIR . '/inc/enqueue.php';
 require_once INFINITY_DIR . '/inc/helpers.php';
+require_once INFINITY_DIR . '/inc/blocks.php';
 
 /**
  * Load WooCommerce integration if WooCommerce is active
