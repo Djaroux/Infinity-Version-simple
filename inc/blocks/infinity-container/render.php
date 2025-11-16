@@ -34,48 +34,49 @@ $border_width      = isset( $attributes['borderWidth'] ) ? esc_attr( $attributes
 $border_radius     = isset( $attributes['borderRadius'] ) ? esc_attr( $attributes['borderRadius'] ) : '';
 $border_style      = isset( $attributes['borderStyle'] ) ? esc_attr( $attributes['borderStyle'] ) : 'solid';
 
-// Construire les styles inline (Background, Dimensions, Container Layout uniquement)
+// Construire les styles inline (uniquement display pour un HTML propre)
 $inline_styles = array();
 
-// Dimensions
-if ( ! empty( $width ) ) {
-    $inline_styles[] = 'width:' . $width;
-}
-if ( ! empty( $height ) ) {
-    $inline_styles[] = 'height:' . $height;
-}
-
-// Container Layout
+// Display uniquement en inline
 if ( ! empty( $display ) ) {
     $inline_styles[] = 'display:' . $display;
 }
+
+// CSS Custom Properties pour tout le reste (géré via CSS)
+// Dimensions
+if ( ! empty( $width ) ) {
+    $inline_styles[] = '--width:' . $width;
+}
+if ( ! empty( $height ) ) {
+    $inline_styles[] = '--height:' . $height;
+}
+
+// Layout
 if ( ! empty( $flex_direction ) ) {
-    $inline_styles[] = 'flex-direction:' . $flex_direction;
+    $inline_styles[] = '--flex-direction:' . $flex_direction;
 }
 if ( ! empty( $justify_content ) ) {
-    $inline_styles[] = 'justify-content:' . $justify_content;
+    $inline_styles[] = '--justify-content:' . $justify_content;
 }
 if ( ! empty( $align_items ) ) {
-    $inline_styles[] = 'align-items:' . $align_items;
+    $inline_styles[] = '--align-items:' . $align_items;
 }
 if ( ! empty( $gap ) ) {
-    $inline_styles[] = 'gap:' . $gap;
+    $inline_styles[] = '--gap:' . $gap;
 }
 if ( ! empty( $grid_template_columns ) ) {
-    $inline_styles[] = 'grid-template-columns:' . $grid_template_columns;
+    $inline_styles[] = '--grid-template-columns:' . $grid_template_columns;
 }
 
 // Background
 if ( ! empty( $background_color ) ) {
-    $inline_styles[] = 'background-color:' . $background_color;
+    $inline_styles[] = '--background-color:' . $background_color;
 }
 if ( ! empty( $background_image ) ) {
-    $inline_styles[] = 'background-image:url(' . $background_image . ')';
-    $inline_styles[] = 'background-size:cover';
-    $inline_styles[] = 'background-position:center';
+    $inline_styles[] = '--background-image:url(' . $background_image . ')';
 }
 
-// CSS Custom Properties pour padding, margin, border (géré via CSS)
+// Padding
 if ( ! empty( $padding_top ) ) {
     $inline_styles[] = '--padding-top:' . $padding_top;
 }
@@ -89,6 +90,7 @@ if ( ! empty( $padding_left ) ) {
     $inline_styles[] = '--padding-left:' . $padding_left;
 }
 
+// Margin
 if ( ! empty( $margin_top ) ) {
     $inline_styles[] = '--margin-top:' . $margin_top;
 }
@@ -102,6 +104,7 @@ if ( ! empty( $margin_left ) ) {
     $inline_styles[] = '--margin-left:' . $margin_left;
 }
 
+// Border
 if ( ! empty( $border_width ) ) {
     $inline_styles[] = '--border-width:' . $border_width;
 }
