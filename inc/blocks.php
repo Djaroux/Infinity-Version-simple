@@ -6,10 +6,64 @@
  */
 
 /**
+ * Register block scripts and styles
+ */
+function infinity_register_block_assets() {
+    // Register the block editor script
+    wp_register_script(
+        'infinity-container-editor',
+        INFINITY_URI . '/inc/blocks/infinity-container/index.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-block-editor', 'wp-components' ),
+        INFINITY_VERSION,
+        true
+    );
+
+    // Register the block style
+    wp_register_style(
+        'infinity-container-style',
+        INFINITY_URI . '/inc/blocks/infinity-container/style.css',
+        array(),
+        INFINITY_VERSION
+    );
+}
+add_action( 'init', 'infinity_register_block_assets' );
+
+/**
  * Register Infinity Container Block
  */
 function infinity_register_blocks() {
     // Register Infinity Container block
-    register_block_type( INFINITY_DIR . '/inc/blocks/infinity-container' );
+    register_block_type( 'infinity/container', array(
+        'editor_script'   => 'infinity-container-editor',
+        'style'           => 'infinity-container-style',
+        'render_callback' => 'infinity_container_render_callback',
+        'attributes'      => array(
+            'customClass'     => array( 'type' => 'string', 'default' => '' ),
+            'paddingTop'      => array( 'type' => 'string', 'default' => '' ),
+            'paddingRight'    => array( 'type' => 'string', 'default' => '' ),
+            'paddingBottom'   => array( 'type' => 'string', 'default' => '' ),
+            'paddingLeft'     => array( 'type' => 'string', 'default' => '' ),
+            'marginTop'       => array( 'type' => 'string', 'default' => '' ),
+            'marginRight'     => array( 'type' => 'string', 'default' => '' ),
+            'marginBottom'    => array( 'type' => 'string', 'default' => '' ),
+            'marginLeft'      => array( 'type' => 'string', 'default' => '' ),
+            'backgroundColor' => array( 'type' => 'string', 'default' => '' ),
+            'backgroundImage' => array( 'type' => 'string', 'default' => '' ),
+            'borderColor'     => array( 'type' => 'string', 'default' => '' ),
+            'borderWidth'     => array( 'type' => 'string', 'default' => '' ),
+            'borderRadius'    => array( 'type' => 'string', 'default' => '' ),
+            'borderStyle'     => array( 'type' => 'string', 'default' => 'solid' ),
+        ),
+    ) );
 }
 add_action( 'init', 'infinity_register_blocks' );
+
+/**
+ * Render callback for Infinity Container block
+ */
+function infinity_container_render_callback( $attributes, $content ) {
+    // Include the render template
+    ob_start();
+    include INFINITY_DIR . '/inc/blocks/infinity-container/render.php';
+    return ob_get_clean();
+}
