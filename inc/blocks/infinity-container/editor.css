@@ -8,7 +8,6 @@
     min-height: 50px;
     outline: 2px dashed #e0e0e0;
     outline-offset: -2px;
-    position: relative;
     transition: outline-color 0.2s ease;
 }
 
@@ -18,14 +17,13 @@
 }
 
 /* When block is empty, show a placeholder hint */
-.wp-block[data-type="infinity/container"] .container:empty::before {
+.wp-block[data-type="infinity/container"] .container:empty::after {
     content: "Infinity Container - Ajoutez des blocs ici";
     color: #999;
     font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: block;
+    text-align: center;
+    padding: 20px;
     pointer-events: none;
 }
 
@@ -34,3 +32,21 @@
     outline-style: solid;
     outline-width: 1px;
 }
+
+/* Ensure inner blocks are visible in flex/grid layouts */
+.wp-block[data-type="infinity/container"] .container > .block-editor-inner-blocks,
+.wp-block[data-type="infinity/container"] .container > .block-editor-inner-blocks > .block-editor-block-list__layout {
+    display: contents;
+}
+
+/* Make sure flex/grid properties work in the editor */
+.wp-block[data-type="infinity/container"] .container[style*="display: flex"],
+.wp-block[data-type="infinity/container"] .container[style*="display:flex"] {
+    display: flex !important;
+}
+
+.wp-block[data-type="infinity/container"] .container[style*="display: grid"],
+.wp-block[data-type="infinity/container"] .container[style*="display:grid"] {
+    display: grid !important;
+}
+
