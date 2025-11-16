@@ -6,6 +6,55 @@
  */
 
 /**
+ * Style Collector - Collect dynamic styles for clean HTML
+ */
+class Infinity_Style_Collector {
+    private static $styles = array();
+
+    /**
+     * Add a style rule
+     */
+    public static function add_style( $selector, $rules ) {
+        if ( ! empty( $rules ) ) {
+            self::$styles[ $selector ] = $rules;
+        }
+    }
+
+    /**
+     * Get all collected styles
+     */
+    public static function get_styles() {
+        return self::$styles;
+    }
+
+    /**
+     * Clear all collected styles
+     */
+    public static function clear_styles() {
+        self::$styles = array();
+    }
+}
+
+/**
+ * Output collected styles in the footer
+ */
+function infinity_output_dynamic_styles() {
+    $styles = Infinity_Style_Collector::get_styles();
+
+    if ( empty( $styles ) ) {
+        return;
+    }
+
+    echo '<style id="infinity-dynamic-styles">';
+    foreach ( $styles as $selector => $rules ) {
+        echo $selector . '{' . implode( ';', $rules ) . ';}';
+    }
+    echo '</style>';
+}
+add_action( 'wp_footer', 'infinity_output_dynamic_styles', 1 );
+
+
+/**
  * Register block scripts and styles
  */
 function infinity_register_block_assets() {

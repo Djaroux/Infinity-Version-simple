@@ -129,15 +129,13 @@ if ( ! empty( $custom_class ) ) {
 
 $class_attr = 'class="' . implode( ' ', $classes ) . '"';
 
-// Générer la balise <style> si des règles CSS existent
-$style_tag = '';
+// Collecter les styles au lieu de les afficher directement (HTML propre)
 if ( ! empty( $css_rules ) ) {
     $css_selector = '.' . $style_class;
-    $style_tag = '<style>' . $css_selector . '{' . implode( ';', $css_rules ) . ';}</style>';
+    Infinity_Style_Collector::add_style( $css_selector, $css_rules );
 }
 
 ?>
-<?php echo $style_tag; ?>
 <div <?php echo $class_attr; ?>>
     <?php echo $content; ?>
 </div>
