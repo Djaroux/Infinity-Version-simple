@@ -1,7 +1,7 @@
 (function(wp) {
     const { registerBlockType } = wp.blocks;
     const { InspectorControls, InnerBlocks, useBlockProps } = wp.blockEditor;
-    const { PanelBody, TextControl, __experimentalBoxControl: BoxControl } = wp.components;
+    const { PanelBody, TextControl, SelectControl, __experimentalBoxControl: BoxControl } = wp.components;
     const { createElement: el, Fragment } = wp.element;
 
     registerBlockType('infinity/container', {
@@ -25,7 +25,13 @@
             borderColor: { type: 'string', default: '' },
             borderWidth: { type: 'string', default: '' },
             borderRadius: { type: 'string', default: '' },
-            borderStyle: { type: 'string', default: 'solid' }
+            borderStyle: { type: 'string', default: 'solid' },
+            display: { type: 'string', default: '' },
+            flexDirection: { type: 'string', default: '' },
+            justifyContent: { type: 'string', default: '' },
+            alignItems: { type: 'string', default: '' },
+            gap: { type: 'string', default: '' },
+            gridTemplateColumns: { type: 'string', default: '' }
         },
 
         edit: function(props) {
@@ -36,13 +42,20 @@
                 paddingTop, paddingRight, paddingBottom, paddingLeft,
                 marginTop, marginRight, marginBottom, marginLeft,
                 backgroundColor, backgroundImage,
-                borderColor, borderWidth, borderRadius, borderStyle
+                borderColor, borderWidth, borderRadius, borderStyle,
+                display, flexDirection, justifyContent, alignItems, gap, gridTemplateColumns
             } = attributes;
 
             // Styles pour l'éditeur
             const containerStyle = {};
             if (width) containerStyle.width = width;
             if (height) containerStyle.height = height;
+            if (display) containerStyle.display = display;
+            if (flexDirection) containerStyle.flexDirection = flexDirection;
+            if (justifyContent) containerStyle.justifyContent = justifyContent;
+            if (alignItems) containerStyle.alignItems = alignItems;
+            if (gap) containerStyle.gap = gap;
+            if (gridTemplateColumns) containerStyle.gridTemplateColumns = gridTemplateColumns;
             if (paddingTop) containerStyle.paddingTop = paddingTop;
             if (paddingRight) containerStyle.paddingRight = paddingRight;
             if (paddingBottom) containerStyle.paddingBottom = paddingBottom;
@@ -91,6 +104,71 @@
                             value: height,
                             onChange: function(value) { setAttributes({ height: value }); },
                             placeholder: 'Ex: 300px, 50vh, auto'
+                        })
+                    ),
+                    // Layout
+                    el(PanelBody, { title: 'Layout', initialOpen: false },
+                        el(SelectControl, {
+                            label: 'Display',
+                            value: display,
+                            options: [
+                                { label: 'Par défaut', value: '' },
+                                { label: 'Flex', value: 'flex' },
+                                { label: 'Grid', value: 'grid' },
+                                { label: 'Block', value: 'block' }
+                            ],
+                            onChange: function(value) { setAttributes({ display: value }); }
+                        }),
+                        display === 'flex' && el(SelectControl, {
+                            label: 'Flex Direction',
+                            value: flexDirection,
+                            options: [
+                                { label: 'Par défaut', value: '' },
+                                { label: 'Row (horizontal)', value: 'row' },
+                                { label: 'Column (vertical)', value: 'column' },
+                                { label: 'Row Reverse', value: 'row-reverse' },
+                                { label: 'Column Reverse', value: 'column-reverse' }
+                            ],
+                            onChange: function(value) { setAttributes({ flexDirection: value }); }
+                        }),
+                        (display === 'flex' || display === 'grid') && el(SelectControl, {
+                            label: 'Justify Content',
+                            value: justifyContent,
+                            options: [
+                                { label: 'Par défaut', value: '' },
+                                { label: 'Flex Start', value: 'flex-start' },
+                                { label: 'Center', value: 'center' },
+                                { label: 'Flex End', value: 'flex-end' },
+                                { label: 'Space Between', value: 'space-between' },
+                                { label: 'Space Around', value: 'space-around' },
+                                { label: 'Space Evenly', value: 'space-evenly' }
+                            ],
+                            onChange: function(value) { setAttributes({ justifyContent: value }); }
+                        }),
+                        (display === 'flex' || display === 'grid') && el(SelectControl, {
+                            label: 'Align Items',
+                            value: alignItems,
+                            options: [
+                                { label: 'Par défaut', value: '' },
+                                { label: 'Flex Start', value: 'flex-start' },
+                                { label: 'Center', value: 'center' },
+                                { label: 'Flex End', value: 'flex-end' },
+                                { label: 'Stretch', value: 'stretch' },
+                                { label: 'Baseline', value: 'baseline' }
+                            ],
+                            onChange: function(value) { setAttributes({ alignItems: value }); }
+                        }),
+                        (display === 'flex' || display === 'grid') && el(TextControl, {
+                            label: 'Gap (espacement entre éléments)',
+                            value: gap,
+                            onChange: function(value) { setAttributes({ gap: value }); },
+                            placeholder: 'Ex: 20px, 1rem'
+                        }),
+                        display === 'grid' && el(TextControl, {
+                            label: 'Grid Template Columns',
+                            value: gridTemplateColumns,
+                            onChange: function(value) { setAttributes({ gridTemplateColumns: value }); },
+                            placeholder: 'Ex: repeat(3, 1fr), 200px 1fr 1fr'
                         })
                     ),
                     // Padding

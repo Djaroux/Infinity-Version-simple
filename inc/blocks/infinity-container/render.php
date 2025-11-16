@@ -10,9 +10,15 @@
  */
 
 // Récupérer les attributs
-$custom_class      = isset( $attributes['customClass'] ) ? esc_attr( $attributes['customClass'] ) : '';
-$width             = isset( $attributes['width'] ) ? esc_attr( $attributes['width'] ) : '';
-$height            = isset( $attributes['height'] ) ? esc_attr( $attributes['height'] ) : '';
+$custom_class           = isset( $attributes['customClass'] ) ? esc_attr( $attributes['customClass'] ) : '';
+$width                  = isset( $attributes['width'] ) ? esc_attr( $attributes['width'] ) : '';
+$height                 = isset( $attributes['height'] ) ? esc_attr( $attributes['height'] ) : '';
+$display                = isset( $attributes['display'] ) ? esc_attr( $attributes['display'] ) : '';
+$flex_direction         = isset( $attributes['flexDirection'] ) ? esc_attr( $attributes['flexDirection'] ) : '';
+$justify_content        = isset( $attributes['justifyContent'] ) ? esc_attr( $attributes['justifyContent'] ) : '';
+$align_items            = isset( $attributes['alignItems'] ) ? esc_attr( $attributes['alignItems'] ) : '';
+$gap                    = isset( $attributes['gap'] ) ? esc_attr( $attributes['gap'] ) : '';
+$grid_template_columns  = isset( $attributes['gridTemplateColumns'] ) ? esc_attr( $attributes['gridTemplateColumns'] ) : '';
 $padding_top       = isset( $attributes['paddingTop'] ) ? esc_attr( $attributes['paddingTop'] ) : '';
 $padding_right     = isset( $attributes['paddingRight'] ) ? esc_attr( $attributes['paddingRight'] ) : '';
 $padding_bottom    = isset( $attributes['paddingBottom'] ) ? esc_attr( $attributes['paddingBottom'] ) : '';
@@ -36,6 +42,26 @@ if ( ! empty( $width ) ) {
 }
 if ( ! empty( $height ) ) {
     $styles[] = 'height:' . $height;
+}
+
+// Layout styles
+if ( ! empty( $display ) ) {
+    $styles[] = 'display:' . $display;
+}
+if ( ! empty( $flex_direction ) ) {
+    $styles[] = 'flex-direction:' . $flex_direction;
+}
+if ( ! empty( $justify_content ) ) {
+    $styles[] = 'justify-content:' . $justify_content;
+}
+if ( ! empty( $align_items ) ) {
+    $styles[] = 'align-items:' . $align_items;
+}
+if ( ! empty( $gap ) ) {
+    $styles[] = 'gap:' . $gap;
+}
+if ( ! empty( $grid_template_columns ) ) {
+    $styles[] = 'grid-template-columns:' . $grid_template_columns;
 }
 
 if ( ! empty( $padding_top ) ) {

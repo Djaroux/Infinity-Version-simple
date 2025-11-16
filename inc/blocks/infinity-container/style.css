@@ -6,6 +6,8 @@
 .container {
     box-sizing: border-box;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* Ensure images and media are responsive inside the container */
