@@ -1,13 +1,30 @@
 /**
  * Infinity Container Block Styles
- * Ultra minimal - only essential responsive styles
+ *
+ * Styles inline : Background, Dimensions, Container Layout
+ * Styles CSS : Padding, Margin, Border
  */
 
 .container {
     box-sizing: border-box;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+
+    /* Padding - appliqué via custom properties */
+    padding-top: var(--padding-top, 0);
+    padding-right: var(--padding-right, 0);
+    padding-bottom: var(--padding-bottom, 0);
+    padding-left: var(--padding-left, 0);
+
+    /* Margin - appliqué via custom properties */
+    margin-top: var(--margin-top, 0);
+    margin-right: var(--margin-right, 0);
+    margin-bottom: var(--margin-bottom, 0);
+    margin-left: var(--margin-left, 0);
+
+    /* Border - appliqué via custom properties */
+    border-width: var(--border-width, 0);
+    border-style: var(--border-style, solid);
+    border-color: var(--border-color, transparent);
+    border-radius: var(--border-radius, 0);
 }
 
 /* Ensure images and media are responsive inside the container */

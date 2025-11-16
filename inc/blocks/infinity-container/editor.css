@@ -1,14 +1,36 @@
 /**
  * Infinity Container Block - Editor Styles
  * Styles used ONLY in the Gutenberg editor
+ *
+ * Styles inline : Background, Dimensions, Container Layout
+ * Styles CSS : Padding, Margin, Border
  */
 
-/* Make the block selectable and visible in the editor */
+/* Base container styles with custom properties */
 .wp-block[data-type="infinity/container"] .container {
+    box-sizing: border-box;
     min-height: 50px;
     outline: 2px dashed #e0e0e0;
     outline-offset: -2px;
     transition: outline-color 0.2s ease;
+
+    /* Padding - appliqué via custom properties */
+    padding-top: var(--padding-top, 0);
+    padding-right: var(--padding-right, 0);
+    padding-bottom: var(--padding-bottom, 0);
+    padding-left: var(--padding-left, 0);
+
+    /* Margin - appliqué via custom properties */
+    margin-top: var(--margin-top, 0);
+    margin-right: var(--margin-right, 0);
+    margin-bottom: var(--margin-bottom, 0);
+    margin-left: var(--margin-left, 0);
+
+    /* Border - appliqué via custom properties */
+    border-width: var(--border-width, 0);
+    border-style: var(--border-style, solid);
+    border-color: var(--border-color, transparent);
+    border-radius: var(--border-radius, 0);
 }
 
 /* When block is selected */
