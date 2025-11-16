@@ -1,47 +1,12 @@
 /**
  * Infinity Container Block Styles
  *
- * HTML propre : uniquement display en inline
- * Tout le reste géré via custom properties CSS
+ * HTML propre : tous les styles générés dans des balises <style>
+ * Utilise les classes personnalisées pour appliquer les styles
  */
 
 .container {
     box-sizing: border-box;
-
-    /* Dimensions */
-    width: var(--width, auto);
-    height: var(--height, auto);
-
-    /* Layout - display est géré inline */
-    flex-direction: var(--flex-direction);
-    justify-content: var(--justify-content);
-    align-items: var(--align-items);
-    gap: var(--gap);
-    grid-template-columns: var(--grid-template-columns);
-
-    /* Background */
-    background-color: var(--background-color);
-    background-image: var(--background-image);
-    background-size: cover;
-    background-position: center;
-
-    /* Padding */
-    padding-top: var(--padding-top, 0);
-    padding-right: var(--padding-right, 0);
-    padding-bottom: var(--padding-bottom, 0);
-    padding-left: var(--padding-left, 0);
-
-    /* Margin */
-    margin-top: var(--margin-top, 0);
-    margin-right: var(--margin-right, 0);
-    margin-bottom: var(--margin-bottom, 0);
-    margin-left: var(--margin-left, 0);
-
-    /* Border */
-    border-width: var(--border-width, 0);
-    border-style: var(--border-style, solid);
-    border-color: var(--border-color, transparent);
-    border-radius: var(--border-radius, 0);
 }
 
 /* Ensure images and media are responsive inside the container */

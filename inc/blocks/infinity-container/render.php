@@ -34,101 +34,110 @@ $border_width      = isset( $attributes['borderWidth'] ) ? esc_attr( $attributes
 $border_radius     = isset( $attributes['borderRadius'] ) ? esc_attr( $attributes['borderRadius'] ) : '';
 $border_style      = isset( $attributes['borderStyle'] ) ? esc_attr( $attributes['borderStyle'] ) : 'solid';
 
-// Construire les styles inline (uniquement display pour un HTML propre)
-$inline_styles = array();
+// Générer les styles CSS dans une balise <style> (pas d'inline)
+$css_rules = array();
 
-// Display uniquement en inline
-if ( ! empty( $display ) ) {
-    $inline_styles[] = 'display:' . $display;
-}
-
-// CSS Custom Properties pour tout le reste (géré via CSS)
 // Dimensions
 if ( ! empty( $width ) ) {
-    $inline_styles[] = '--width:' . $width;
+    $css_rules[] = 'width:' . $width;
 }
 if ( ! empty( $height ) ) {
-    $inline_styles[] = '--height:' . $height;
+    $css_rules[] = 'height:' . $height;
 }
 
 // Layout
+if ( ! empty( $display ) ) {
+    $css_rules[] = 'display:' . $display;
+}
 if ( ! empty( $flex_direction ) ) {
-    $inline_styles[] = '--flex-direction:' . $flex_direction;
+    $css_rules[] = 'flex-direction:' . $flex_direction;
 }
 if ( ! empty( $justify_content ) ) {
-    $inline_styles[] = '--justify-content:' . $justify_content;
+    $css_rules[] = 'justify-content:' . $justify_content;
 }
 if ( ! empty( $align_items ) ) {
-    $inline_styles[] = '--align-items:' . $align_items;
+    $css_rules[] = 'align-items:' . $align_items;
 }
 if ( ! empty( $gap ) ) {
-    $inline_styles[] = '--gap:' . $gap;
+    $css_rules[] = 'gap:' . $gap;
 }
 if ( ! empty( $grid_template_columns ) ) {
-    $inline_styles[] = '--grid-template-columns:' . $grid_template_columns;
+    $css_rules[] = 'grid-template-columns:' . $grid_template_columns;
 }
 
 // Background
 if ( ! empty( $background_color ) ) {
-    $inline_styles[] = '--background-color:' . $background_color;
+    $css_rules[] = 'background-color:' . $background_color;
 }
 if ( ! empty( $background_image ) ) {
-    $inline_styles[] = '--background-image:url(' . $background_image . ')';
+    $css_rules[] = 'background-image:url(' . $background_image . ')';
+    $css_rules[] = 'background-size:cover';
+    $css_rules[] = 'background-position:center';
 }
 
 // Padding
 if ( ! empty( $padding_top ) ) {
-    $inline_styles[] = '--padding-top:' . $padding_top;
+    $css_rules[] = 'padding-top:' . $padding_top;
 }
 if ( ! empty( $padding_right ) ) {
-    $inline_styles[] = '--padding-right:' . $padding_right;
+    $css_rules[] = 'padding-right:' . $padding_right;
 }
 if ( ! empty( $padding_bottom ) ) {
-    $inline_styles[] = '--padding-bottom:' . $padding_bottom;
+    $css_rules[] = 'padding-bottom:' . $padding_bottom;
 }
 if ( ! empty( $padding_left ) ) {
-    $inline_styles[] = '--padding-left:' . $padding_left;
+    $css_rules[] = 'padding-left:' . $padding_left;
 }
 
 // Margin
 if ( ! empty( $margin_top ) ) {
-    $inline_styles[] = '--margin-top:' . $margin_top;
+    $css_rules[] = 'margin-top:' . $margin_top;
 }
 if ( ! empty( $margin_right ) ) {
-    $inline_styles[] = '--margin-right:' . $margin_right;
+    $css_rules[] = 'margin-right:' . $margin_right;
 }
 if ( ! empty( $margin_bottom ) ) {
-    $inline_styles[] = '--margin-bottom:' . $margin_bottom;
+    $css_rules[] = 'margin-bottom:' . $margin_bottom;
 }
 if ( ! empty( $margin_left ) ) {
-    $inline_styles[] = '--margin-left:' . $margin_left;
+    $css_rules[] = 'margin-left:' . $margin_left;
 }
 
 // Border
-if ( ! empty( $border_width ) ) {
-    $inline_styles[] = '--border-width:' . $border_width;
-}
-if ( ! empty( $border_color ) ) {
-    $inline_styles[] = '--border-color:' . $border_color;
+if ( ! empty( $border_width ) && ! empty( $border_color ) ) {
+    $css_rules[] = 'border:' . $border_width . ' ' . $border_style . ' ' . $border_color;
 }
 if ( ! empty( $border_radius ) ) {
-    $inline_styles[] = '--border-radius:' . $border_radius;
+    $css_rules[] = 'border-radius:' . $border_radius;
 }
-if ( ! empty( $border_style ) ) {
-    $inline_styles[] = '--border-style:' . $border_style;
-}
-
-// Générer l'attribut style
-$style_attr = ! empty( $inline_styles ) ? ' style="' . implode( ';', $inline_styles ) . '"' : '';
 
 // Construire les classes
 $classes = array( 'container' );
+$style_class = '';
+
+// Si une classe personnalisée est définie, l'utiliser pour le CSS
+// Sinon, générer une classe unique basée sur les attributs
 if ( ! empty( $custom_class ) ) {
     $classes[] = $custom_class;
+    $style_class = $custom_class;
+} else {
+    // Générer une classe unique basée sur un hash des attributs
+    $unique_id = 'inf-' . substr( md5( serialize( $attributes ) ), 0, 8 );
+    $classes[] = $unique_id;
+    $style_class = $unique_id;
 }
+
 $class_attr = 'class="' . implode( ' ', $classes ) . '"';
 
+// Générer la balise <style> si des règles CSS existent
+$style_tag = '';
+if ( ! empty( $css_rules ) ) {
+    $css_selector = '.container.' . $style_class;
+    $style_tag = '<style>' . $css_selector . '{' . implode( ';', $css_rules ) . ';}</style>';
+}
+
 ?>
-<div <?php echo $class_attr . $style_attr; ?>>
+<?php echo $style_tag; ?>
+<div <?php echo $class_attr; ?>>
     <?php echo $content; ?>
 </div>
