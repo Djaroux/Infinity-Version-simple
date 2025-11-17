@@ -17,12 +17,14 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<main>
 <?php
 while ( have_posts() ) :
     the_post();
     the_content();
 endwhile;
 ?>
+</main>
 
 <?php wp_footer(); ?>
 </body>
