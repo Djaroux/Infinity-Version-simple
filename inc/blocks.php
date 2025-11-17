@@ -36,22 +36,168 @@ class Infinity_Style_Collector {
 }
 
 /**
- * Output collected styles in the footer
+ * Generate CSS file from post content
  */
-function infinity_output_dynamic_styles() {
-    $styles = Infinity_Style_Collector::get_styles();
-
-    if ( empty( $styles ) ) {
+function infinity_generate_post_css( $post_id ) {
+    // Skip autosaves and revisions
+    if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
         return;
     }
 
-    echo '<style id="infinity-dynamic-styles">';
-    foreach ( $styles as $selector => $rules ) {
-        echo $selector . '{' . implode( ';', $rules ) . ';}';
+    // Get post content
+    $post = get_post( $post_id );
+    if ( ! $post || empty( $post->post_content ) ) {
+        return;
     }
-    echo '</style>';
+
+    // Parse blocks
+    $blocks = parse_blocks( $post->post_content );
+    $css_rules = array();
+
+    // Extract styles from infinity/container blocks
+    infinity_extract_container_styles( $blocks, $css_rules );
+
+    // Generate CSS file
+    if ( ! empty( $css_rules ) ) {
+        $css_content = '';
+        foreach ( $css_rules as $selector => $rules ) {
+            $css_content .= $selector . '{' . implode( ';', $rules ) . ";}";
+        }
+
+        // Save to file
+        $css_dir = INFINITY_DIR . '/assets/css/pages';
+        if ( ! file_exists( $css_dir ) ) {
+            wp_mkdir_p( $css_dir );
+        }
+
+        $css_file = $css_dir . '/page-' . $post_id . '.css';
+        file_put_contents( $css_file, $css_content );
+    }
 }
-add_action( 'wp_footer', 'infinity_output_dynamic_styles', 1 );
+
+/**
+ * Recursively extract styles from container blocks
+ */
+function infinity_extract_container_styles( $blocks, &$css_rules ) {
+    foreach ( $blocks as $block ) {
+        if ( $block['blockName'] === 'infinity/container' && ! empty( $block['attrs'] ) ) {
+            $attrs = $block['attrs'];
+            $rules = array();
+
+            // Dimensions
+            if ( ! empty( $attrs['width'] ) ) {
+                $rules[] = 'width:' . esc_attr( $attrs['width'] );
+            }
+            if ( ! empty( $attrs['height'] ) ) {
+                $rules[] = 'height:' . esc_attr( $attrs['height'] );
+            }
+
+            // Layout
+            if ( ! empty( $attrs['display'] ) ) {
+                $rules[] = 'display:' . esc_attr( $attrs['display'] );
+            }
+            if ( ! empty( $attrs['flexDirection'] ) ) {
+                $rules[] = 'flex-direction:' . esc_attr( $attrs['flexDirection'] );
+            }
+            if ( ! empty( $attrs['justifyContent'] ) ) {
+                $rules[] = 'justify-content:' . esc_attr( $attrs['justifyContent'] );
+            }
+            if ( ! empty( $attrs['alignItems'] ) ) {
+                $rules[] = 'align-items:' . esc_attr( $attrs['alignItems'] );
+            }
+            if ( ! empty( $attrs['gap'] ) ) {
+                $rules[] = 'gap:' . esc_attr( $attrs['gap'] );
+            }
+            if ( ! empty( $attrs['gridTemplateColumns'] ) ) {
+                $rules[] = 'grid-template-columns:' . esc_attr( $attrs['gridTemplateColumns'] );
+            }
+
+            // Background
+            if ( ! empty( $attrs['backgroundColor'] ) ) {
+                $rules[] = 'background-color:' . esc_attr( $attrs['backgroundColor'] );
+            }
+            if ( ! empty( $attrs['backgroundImage'] ) ) {
+                $rules[] = 'background-image:url(' . esc_url( $attrs['backgroundImage'] ) . ')';
+                $rules[] = 'background-size:cover';
+                $rules[] = 'background-position:center';
+            }
+
+            // Padding
+            if ( ! empty( $attrs['paddingTop'] ) ) {
+                $rules[] = 'padding-top:' . esc_attr( $attrs['paddingTop'] );
+            }
+            if ( ! empty( $attrs['paddingRight'] ) ) {
+                $rules[] = 'padding-right:' . esc_attr( $attrs['paddingRight'] );
+            }
+            if ( ! empty( $attrs['paddingBottom'] ) ) {
+                $rules[] = 'padding-bottom:' . esc_attr( $attrs['paddingBottom'] );
+            }
+            if ( ! empty( $attrs['paddingLeft'] ) ) {
+                $rules[] = 'padding-left:' . esc_attr( $attrs['paddingLeft'] );
+            }
+
+            // Margin
+            if ( ! empty( $attrs['marginTop'] ) ) {
+                $rules[] = 'margin-top:' . esc_attr( $attrs['marginTop'] );
+            }
+            if ( ! empty( $attrs['marginRight'] ) ) {
+                $rules[] = 'margin-right:' . esc_attr( $attrs['marginRight'] );
+            }
+            if ( ! empty( $attrs['marginBottom'] ) ) {
+                $rules[] = 'margin-bottom:' . esc_attr( $attrs['marginBottom'] );
+            }
+            if ( ! empty( $attrs['marginLeft'] ) ) {
+                $rules[] = 'margin-left:' . esc_attr( $attrs['marginLeft'] );
+            }
+
+            // Border
+            if ( ! empty( $attrs['borderWidth'] ) && ! empty( $attrs['borderColor'] ) ) {
+                $border_style = ! empty( $attrs['borderStyle'] ) ? esc_attr( $attrs['borderStyle'] ) : 'solid';
+                $rules[] = 'border:' . esc_attr( $attrs['borderWidth'] ) . ' ' . $border_style . ' ' . esc_attr( $attrs['borderColor'] );
+            }
+            if ( ! empty( $attrs['borderRadius'] ) ) {
+                $rules[] = 'border-radius:' . esc_attr( $attrs['borderRadius'] );
+            }
+
+            // Determine class
+            if ( ! empty( $attrs['customClass'] ) ) {
+                $selector = '.' . esc_attr( $attrs['customClass'] );
+            } else {
+                $selector = '.inf-' . substr( md5( serialize( $attrs ) ), 0, 8 );
+            }
+
+            if ( ! empty( $rules ) ) {
+                $css_rules[ $selector ] = $rules;
+            }
+        }
+
+        // Recursively process inner blocks
+        if ( ! empty( $block['innerBlocks'] ) ) {
+            infinity_extract_container_styles( $block['innerBlocks'], $css_rules );
+        }
+    }
+}
+
+/**
+ * Hook: Generate CSS on post save
+ */
+add_action( 'save_post', 'infinity_generate_post_css', 10, 1 );
+
+/**
+ * Enqueue generated CSS file in head
+ */
+function infinity_enqueue_page_css() {
+    if ( is_singular() ) {
+        $post_id = get_the_ID();
+        $css_file = INFINITY_DIR . '/assets/css/pages/page-' . $post_id . '.css';
+        $css_url = INFINITY_URI . '/assets/css/pages/page-' . $post_id . '.css';
+
+        if ( file_exists( $css_file ) ) {
+            wp_enqueue_style( 'infinity-page-' . $post_id, $css_url, array(), filemtime( $css_file ) );
+        }
+    }
+}
+add_action( 'wp_enqueue_scripts', 'infinity_enqueue_page_css', 20 );
 
 
 /**
